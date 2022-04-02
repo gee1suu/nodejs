@@ -5,11 +5,13 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const { User } = require("./models/User");
 const config = require("./config/key");
+const cookieParser = require("cookie-parser");
 
 // aplication/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 // aplication/json
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.get("/", (req, res) => res.send("Hello World!"));
 
@@ -38,7 +40,15 @@ app.post("/login", (req, res) => {
           message: "비밀번호가 틀렸습니다.",
         });
       // 비밀번호까지 같다면 Token을 생성
-      user.generateToken((err, user) => {});
+      user.generateToken((err, user) => {
+        if (err) return res.status(400).send(err);
+
+        // 토큰을 쿠키에 저장
+        res
+          .cookie("x_auth", user.token)
+          .status(200)
+          .json({ loginSuccess: true, userId: user._id });
+      });
     });
   });
 });

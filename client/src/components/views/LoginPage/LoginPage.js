@@ -1,8 +1,38 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../../_actions/user_actions";
+import { useNavigate } from "react-router-dom";
 
-export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export default function LoginPage(props) {
+  const dispatch = useDispatch();
+  let navigate = useNavigate();
+  const [Email, setEmail] = useState("");
+  const [Password, setPassword] = useState("");
+
+  const onEmailHandler = (event) => {
+    setEmail(event.currentTarget.value);
+  };
+
+  const onPasswordHandler = (event) => {
+    setPassword(event.currentTarget.value);
+  };
+
+  const onSubmitHandler = (event) => {
+    event.preventDefault();
+
+    let body = {
+      email: Email,
+      password: Password,
+    };
+
+    dispatch(loginUser(body)).then((response) => {
+      if (response.payload.loginSuccess) {
+        navigate("/home");
+      } else {
+        console.log("Error");
+      }
+    });
+  };
 
   return (
     <div
@@ -14,21 +44,16 @@ export default function LoginPage() {
         height: "100vh",
       }}
     >
-      <form style={{ display: "flex", flexDirection: "column" }}>
+      <form
+        style={{ display: "flex", flexDirection: "column" }}
+        onSubmit={onSubmitHandler}
+      >
         <label>Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(event) => setEmail(event.currentTarget.value)}
-        />
+        <input type="email" value={Email} onChange={onEmailHandler} />
         <label>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(event) => setPassword(event.currentTarget.value)}
-        />
+        <input type="password" value={Password} onChange={onPasswordHandler} />
         <br />
-        <button>Login</button>
+        <button type="submit">Login</button>
       </form>
     </div>
   );

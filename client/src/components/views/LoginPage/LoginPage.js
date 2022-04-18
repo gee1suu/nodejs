@@ -27,9 +27,9 @@ export default function LoginPage(props) {
 
     dispatch(loginUser(body)).then((response) => {
       if (response.payload.loginSuccess) {
-        navigate("/home");
+        navigate("/");
       } else {
-        console.log("Error");
+        alert("Error");
       }
     });
   };

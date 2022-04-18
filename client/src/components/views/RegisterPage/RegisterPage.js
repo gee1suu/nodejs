@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../../../_actions/user_actions";
 import { useNavigate } from "react-router-dom";
+import Auth from "../../../hoc/auth";
 
-export default function RegisterPage() {
+function RegisterPage() {
   const dispatch = useDispatch();
   let navigate = useNavigate();
   const [Email, setEmail] = useState("");
@@ -81,3 +82,5 @@ export default function RegisterPage() {
     </div>
   );
 }
+
+export default Auth(RegisterPage, false);

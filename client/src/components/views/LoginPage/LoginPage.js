@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../../_actions/user_actions";
 import { useNavigate } from "react-router-dom";
+import Auth from "../../../hoc/auth";
 
-export default function LoginPage(props) {
+function LoginPage(props) {
   const dispatch = useDispatch();
   let navigate = useNavigate();
   const [Email, setEmail] = useState("");
@@ -58,3 +59,5 @@ export default function LoginPage(props) {
     </div>
   );
 }
+
+export default Auth(LoginPage, false);
